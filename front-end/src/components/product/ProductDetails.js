@@ -6,6 +6,7 @@ import {
   getProductDetails,
   clearErrors,
 } from "../../redux/actions/productAction";
+import { Carousel } from "react-bootstrap";
 
 const ProductDetails = ({ match }) => {
   const alert = useAlert();
@@ -14,13 +15,16 @@ const ProductDetails = ({ match }) => {
     (state) => state.productDtails
   );
   console.log(product);
+  console.log(match.params.id);
   useEffect(() => {
-    dispatch(getProductDetails(match.params.id));
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
+    if (match.params.id) {
+      dispatch(getProductDetails(match.params.id));
     }
-  }, [dispatch, error, alert, match.params.id]);
+    // if (error) {
+    //   alert.error(error);
+    //   dispatch(clearErrors());
+    // }
+  }, [dispatch, match.params.id]);
   return (
     <Fragment>
       {loading ? (
@@ -29,23 +33,37 @@ const ProductDetails = ({ match }) => {
         <Fragment>
           <div className="row f-flex justify-content-around">
             <div className="col-12 col-lg-5 img-fluid" id="product_image">
-              <img className="d-block w-100" src="/images/product.jpg" alt="" />
+              <Carousel pause="hover">
+                {product.images &&
+                  product.images.map((image) => (
+                    <Carousel.Item key={image.product_id}>
+                      <img
+                        className="d-block w-100"
+                        src={image.url}
+                        alt={product.title}
+                      />
+                    </Carousel.Item>
+                  ))}
+              </Carousel>
             </div>
 
             <div className="col-12 col-lg-5 mt-5">
               <h3>{product.name}</h3>
-              <p id="product_id">Product # </p>
+              <p id="product_id">Product # {product._id} </p>
 
               <hr />
 
               <div className="rating-outer">
-                <div className="rating-inner"></div>
+                <div
+                  className="rating-inner"
+                  style={{ width: `${(product.ratings / 5) * 100}%` }}
+                ></div>
               </div>
-              <span id="no_of_reviews">review</span>
+              <span id="no_of_reviews">( {product.numofreviews} review)</span>
 
               <hr />
 
-              <p id="product_price">price</p>
+              <p id="product_price">{product.price}$</p>
               <div className="stockCounter d-inline">
                 <span className="btn btn-danger minus">-</span>
 
@@ -64,25 +82,22 @@ const ProductDetails = ({ match }) => {
               <hr />
 
               <p>
-                Status:{" "}
-                <span id="stock_status" className="greenColor">
-                  stock
+                Status:
+                <span
+                  id="stock_status"
+                  className={product.stock > 0 ? "greenColor" : "redColor"}
+                >
+                  {product.stock > 0 ? "In Stock" : "Out Of Stock"}
                 </span>
               </p>
 
               <hr />
 
               <h4 className="mt-2">Description:</h4>
-              <p>
-                It helps you write applications that behave consistently, run in
-                different environments (client, server, and native), and are
-                easy to test. On top of that, it provides a great developer
-                experience, such as live code editing combined with a time
-                traveling debugger.
-              </p>
+              <p>{product.description}</p>
               <hr />
               <p id="product_seller mb-3">
-                Sold by: <strong>seller</strong>
+                Sold by: <strong>{product.seller}</strong>
               </p>
 
               <button

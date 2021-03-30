@@ -9,7 +9,7 @@
     "prod": "SET NODE_ENV=PRODUCTION& nodemon back-end/server",
     "seeder": "node back-end/utils/seeder.js",
     "client": "cd front-end && npm start",
-    "shop": "concurrently \"npm run prod\" \"npm run client\""
+    "shop": "concurrently \"npm run dev\" \"npm run client\""
   },
   "keywords": [],
   "author": "",
@@ -19,6 +19,7 @@
     "body-parser": "^1.19.0",
     "concurrently": "^6.0.0",
     "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
     "create-react-app": "^4.0.3",
     "crypto": "^1.0.1",
     "dotenv": "^8.2.0",

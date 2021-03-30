@@ -9,16 +9,24 @@ import {
   CLEAR_ERRORS,
 } from "../actionsTypes/types";
 
-export const getProducts = (keyword = "", currentPage = 1) => async (
-  dispatch
-) => {
+export const getProducts = (
+  keyword = "",
+  currentPage = 1,
+  price,
+  category,
+  rating = 0
+) => async (dispatch) => {
   try {
     dispatch({
       type: ALL_PRODUCTS_REQUEST,
     });
-    const { data } = await axios.get(
-      `http://localhost:5000/api/v1/products?keyword=${keyword}&page=${currentPage}`
-    );
+    let link = `http://localhost:5000/api/v1/products?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}&ratings[gte]=${rating}`;
+
+    if (category) {
+      link = `http://localhost:5000/api/v1/products?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}&category=${category}&ratings[gte]=${rating}`;
+    }
+
+    const { data } = await axios.get(link);
 
     dispatch({
       type: ALL_PRODUCTS_SUCCESS,

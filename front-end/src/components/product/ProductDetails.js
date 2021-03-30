@@ -7,6 +7,7 @@ import {
   clearErrors,
 } from "../../redux/actions/productAction";
 import { Carousel } from "react-bootstrap";
+import MetaData from "../layout/MetaData";
 
 const ProductDetails = ({ match }) => {
   const alert = useAlert();
@@ -14,23 +15,22 @@ const ProductDetails = ({ match }) => {
   const { loading, error, product } = useSelector(
     (state) => state.productDtails
   );
-  console.log(product);
-  console.log(match.params.id);
+
   useEffect(() => {
-    if (match.params.id) {
-      dispatch(getProductDetails(match.params.id));
+    dispatch(getProductDetails(match.params.id));
+
+    if (error) {
+      alert.error(error);
+      dispatch(clearErrors());
     }
-    // if (error) {
-    //   alert.error(error);
-    //   dispatch(clearErrors());
-    // }
-  }, [dispatch, match.params.id]);
+  }, [dispatch, alert, error, match.params.id]);
   return (
     <Fragment>
       {loading ? (
         <SkeletonLoading />
       ) : (
         <Fragment>
+          <MetaData title={product.name} />
           <div className="row f-flex justify-content-around">
             <div className="col-12 col-lg-5 img-fluid" id="product_image">
               <Carousel pause="hover">

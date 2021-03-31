@@ -5,9 +5,6 @@ import {
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS_SUCCESS,
   PRODUCT_DETAILS_FAIL,
-  REGISTER_REQUEST,
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
   CLEAR_ERRORS,
 } from "../actionsTypes/types";
 
@@ -15,14 +12,12 @@ export const productsReducer = (state = { products: [] }, action) => {
   const { type, payload } = action;
   switch (type) {
     case ALL_PRODUCTS_REQUEST:
-    case REGISTER_REQUEST:
       return {
         loading: true,
         products: [],
       };
 
     case ALL_PRODUCTS_SUCCESS:
-    case REGISTER_SUCCESS:
       return {
         loading: false,
         products: payload.products,
@@ -32,7 +27,6 @@ export const productsReducer = (state = { products: [] }, action) => {
       };
 
     case ALL_PRODUCTS_FAIL:
-    case REGISTER_FAIL:
       return {
         loading: false,
         error: payload,

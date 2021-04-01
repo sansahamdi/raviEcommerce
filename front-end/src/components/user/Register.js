@@ -43,10 +43,10 @@ const Register = ({ history }) => {
 
     const formData = new FormData();
 
-    formData.set("name", name);
-    formData.set("email", email);
-    formData.set("password", password);
-    formData.set("avatar", avatar);
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("avatar", avatar);
 
     dispatch(register(formData));
   };

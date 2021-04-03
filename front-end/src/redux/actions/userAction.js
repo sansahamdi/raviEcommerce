@@ -6,11 +6,18 @@ import {
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
+  LOAD_USER_FAIL,
+  LOAD_USER_REQUEST,
+  LOAD_USER_SUCCESS,
   CLEAR_ERRORS,
 } from "../actionsTypes/types";
 
 // Login
 export const login = (email, password) => async (dispatch) => {
+  // if (localStorage.token) {
+  //   SetToken(localStorage.token);
+  // }
+
   try {
     dispatch({
       type: LOGIN_REQUEST,
@@ -30,7 +37,7 @@ export const login = (email, password) => async (dispatch) => {
 
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: data.user,
+      payload: data,
     });
   } catch (error) {
     dispatch({
@@ -66,6 +73,27 @@ export const register = (userData) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: REGISTER_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Load user
+export const loadUser = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: LOAD_USER_REQUEST,
+    });
+
+    const { data } = await axios.get("http://localhost:5000/api/v1/me");
+
+    dispatch({
+      type: LOAD_USER_SUCCESS,
+      payload: data.user,
+    });
+  } catch (error) {
+    dispatch({
+      type: LOAD_USER_FAIL,
       payload: error.response.data.message,
     });
   }

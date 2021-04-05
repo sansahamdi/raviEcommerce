@@ -9,8 +9,14 @@ import {
   LOAD_USER_FAIL,
   LOAD_USER_REQUEST,
   LOAD_USER_SUCCESS,
+  UPDATE_PROFILE_REQUEST,
+  UPDATE_PROFILE_SUCCESS,
+  UPDATE_PROFILE_FAIL,
+  LOGOUT_FAIL,
+  LOGOUT_SUCCESS,
   CLEAR_ERRORS,
 } from "../actionsTypes/types";
+// import SetToken from "../../utils/SetToken";
 
 // Login
 export const login = (email, password) => async (dispatch) => {
@@ -68,8 +74,10 @@ export const register = (userData) => async (dispatch) => {
 
     dispatch({
       type: REGISTER_SUCCESS,
-      payload: data.user,
+      payload: data,
     });
+
+    // console.log(data);
   } catch (error) {
     dispatch({
       type: REGISTER_FAIL,
@@ -89,11 +97,60 @@ export const loadUser = () => async (dispatch) => {
 
     dispatch({
       type: LOAD_USER_SUCCESS,
-      payload: data.user,
+      payload: data,
     });
   } catch (error) {
     dispatch({
       type: LOAD_USER_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Update Profile
+export const updateProfile = (userData) => async (dispatch) => {
+  try {
+    dispatch({
+      type: UPDATE_PROFILE_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    const { data } = await axios.put(
+      "http://localhost:5000/api/v1/me/update",
+      userData,
+      config
+    );
+
+    dispatch({
+      type: UPDATE_PROFILE_SUCCESS,
+      payload: data.success,
+    });
+
+    // console.log(data);
+  } catch (error) {
+    dispatch({
+      type: UPDATE_PROFILE_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Logout user
+export const logout = () => async (dispatch) => {
+  try {
+    // await axios.get("http://localhost:5000/api/v1/logout"); // false
+
+    dispatch({
+      type: LOGOUT_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: LOGOUT_FAIL,
       payload: error.response.data.message,
     });
   }

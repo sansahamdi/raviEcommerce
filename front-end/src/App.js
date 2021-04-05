@@ -8,12 +8,14 @@ import Login from "./components/user/Login";
 import Register from "./components/user/Register";
 import { loadUser } from "./redux/actions/userAction";
 import store from "./redux/store";
+import Profile from "./components/user/Profile";
+import ProtectedRoute from "./components/route/ProtectedRoute";
 import SetToken from "./utils/SetToken";
+import UpdateProfile from "./components/user/UpdateProfile";
 
 if (localStorage.token) {
   SetToken(localStorage.token);
 }
-
 function App() {
   useEffect(() => {
     store.dispatch(loadUser());
@@ -29,6 +31,8 @@ function App() {
           <Route path="/product/:id" exact component={ProductDetails} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
+          <ProtectedRoute path="/me" component={Profile} exact />
+          <ProtectedRoute path="/me/update" component={UpdateProfile} exact />
         </div>
         <Footer />
       </div>

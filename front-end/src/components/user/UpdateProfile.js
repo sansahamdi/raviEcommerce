@@ -3,17 +3,16 @@ import MetaData from "../layout/MetaData";
 
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
-import { register, clearErrors } from "../../redux/actions/userAction";
+import {
+  updateProfile,
+  loadUser,
+  clearErrors,
+} from "../../redux/actions/userAction";
+import { UPDATE_PROFILE_RESET } from "../../redux/actionsTypes/types";
 
-const Register = ({ history }) => {
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
-  const { name, email, password } = user;
-
+const UpdateProfile = ({ history }) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [avatar, setAvatar] = useState("");
   const [avatarPreview, setAvatarPreview] = useState(
     "/images/default_avatar.jpg"
@@ -23,20 +22,30 @@ const Register = ({ history }) => {
 
   const dispatch = useDispatch();
 
-  const { loading, isAuthenticated, error } = useSelector(
-    (state) => state.auth
-  );
+  const { user } = useSelector((state) => state.auth);
+  const { error, isUpdated, loading } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      history.push("/");
+    if (user) {
+      setName(user.name);
+      setEmail(user.email);
+      setAvatarPreview(user.avatar.url);
     }
 
     if (error) {
       alert.error(error);
       dispatch(clearErrors());
     }
-  }, [dispatch, alert, isAuthenticated, error, history]);
+
+    if (isUpdated) {
+      alert.success("User Updated Successfully");
+      dispatch(loadUser());
+      history.push("/me");
+      dispatch({
+        type: UPDATE_PROFILE_RESET,
+      });
+    }
+  }, [dispatch, alert, isUpdated, error, history]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -45,30 +54,25 @@ const Register = ({ history }) => {
 
     formData.append("name", name);
     formData.append("email", email);
-    formData.append("password", password);
     formData.append("avatar", avatar);
 
-    dispatch(register(formData));
+    dispatch(updateProfile(formData));
   };
 
   const onChange = (e) => {
-    if (e.target.name === "avatar") {
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setAvatarPreview(reader.result);
-          setAvatar(reader.result);
-        }
-      };
-      reader.readAsDataURL(e.target.files[0]);
-    } else {
-      setUser({ ...user, [e.target.name]: e.target.value });
-    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setAvatarPreview(reader.result);
+        setAvatar(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
   };
-
+  console.log(avatar);
   return (
     <Fragment>
-      <MetaData title={"Register user"} />
+      <MetaData title={"Update Profile"} />
       <div className="row wrapper">
         <div className="col-10 col-lg-5">
           <form
@@ -76,7 +80,7 @@ const Register = ({ history }) => {
             className="shadow-lg"
             encType="multipart/form-data"
           >
-            <h1 className="mb-3">Register</h1>
+            <h1 className="mt-2 mb-5">Update Profile</h1>
 
             <div className="form-group">
               <label htmlFor="email_field">Name</label>
@@ -84,9 +88,9 @@ const Register = ({ history }) => {
                 type="name"
                 id="name_field"
                 className="form-control"
-                value={name}
                 name="name"
-                onChange={onChange}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
 
@@ -96,21 +100,9 @@ const Register = ({ history }) => {
                 type="email"
                 id="email_field"
                 className="form-control"
-                value={email}
                 name="email"
-                onChange={onChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="password_field">Password</label>
-              <input
-                type="password"
-                id="password_field"
-                className="form-control"
-                value={password}
-                name="password"
-                onChange={onChange}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
@@ -122,7 +114,7 @@ const Register = ({ history }) => {
                     <img
                       src={avatarPreview}
                       className="rounded-circle"
-                      alt="avatar preview"
+                      alt="Avatar Preview"
                     />
                   </figure>
                 </div>
@@ -143,12 +135,11 @@ const Register = ({ history }) => {
             </div>
 
             <button
-              id="register_button"
               type="submit"
-              className="btn btn-block py-3"
+              className="btn update-btn btn-block mt-4 mb-3"
               disabled={loading ? true : false}
             >
-              REGISTER
+              Update
             </button>
           </form>
         </div>
@@ -157,4 +148,4 @@ const Register = ({ history }) => {
   );
 };
 
-export default Register;
+export default UpdateProfile;

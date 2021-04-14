@@ -10,7 +10,7 @@ import {
   removeItemFromCart,
 } from "../../redux/actions/cartAction";
 
-const Cart = () => {
+const Cart = ({ history }) => {
   const dispatch = useDispatch();
   const alert = useAlert();
 
@@ -35,6 +35,10 @@ const Cart = () => {
     if (newQty <= 0) return;
 
     dispatch(addItemToCart(id, newQty));
+  };
+
+  const checkoutHandler = () => {
+    history.push("/login?redirect=shipping");
   };
 
   return (
@@ -140,7 +144,11 @@ const Cart = () => {
                 </p>
 
                 <hr />
-                <button id="checkout_btn" className="btn btn-primary btn-block">
+                <button
+                  id="checkout_btn"
+                  className="btn btn-primary btn-block"
+                  onClick={checkoutHandler}
+                >
                   Check out
                 </button>
               </div>

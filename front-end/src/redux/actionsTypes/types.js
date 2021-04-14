@@ -38,6 +38,7 @@ export const NEW_PASSWORD_FAIL = "NEW_PASSWORD_FAIL";
 
 // CART CONSTANTS
 export const ADD_TO_CART = "ADD_TO_CART";
+export const REMOVE_ITEM_CART = "REMOVE_ITEM_CART";
 
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 export const LOGOUT_FAIL = "LOGOUT_FAIL";

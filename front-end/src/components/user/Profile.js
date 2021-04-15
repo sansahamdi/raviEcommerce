@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import SkeletonLoading from "../SkeletonLoading";
 
 import MetaData from "../layout/MetaData";

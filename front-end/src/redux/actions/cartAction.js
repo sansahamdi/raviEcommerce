@@ -40,5 +40,5 @@ export const saveShippingInfo = (data) => async (dispatch) => {
     payload: data,
   });
 
-  localStorage.setItem("cartItems", JSON.stringify(data));
+  localStorage.setItem("shippingInfo", JSON.stringify(data));
 };

@@ -5,6 +5,7 @@ import MetaData from "../layout/MetaData";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { saveShippingInfo } from "../../redux/actions/cartAction";
+import CheckoutSteps from "./CheckoutSteps";
 
 const Shipping = ({ history }) => {
   const { shippingInfo } = useSelector((state) => state.cart);
@@ -22,12 +23,13 @@ const Shipping = ({ history }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(saveShippingInfo({ adress, city, zipCode, phoneNumber, country }));
-    history.push("/confirm");
+    history.push("/order/confirm");
   };
 
   return (
     <Fragment>
       <MetaData title={"Shipping Info"} />
+      <CheckoutSteps shipping />
       <div className="row wrapper">
         <div className="col-10 col-lg-5">
           <form className="shadow-lg" onSubmit={submitHandler}>

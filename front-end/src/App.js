@@ -23,6 +23,10 @@ import Payment from "./components/cart/Payment";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import OrderSuccess from "./components/cart/OrderSuccess";
+import ListOrders from "./components/order/ListOrders";
+import Dashboard from "./components/admin/Dashboard";
+import ProductsList from "./components/admin/ProdutsList";
+import NewProduct from "./components/admin/NewProduct";
 
 if (localStorage.token) {
   SetToken(localStorage.token);
@@ -72,7 +76,28 @@ function App() {
             component={UpdatePassword}
             exact
           />
+
+          <ProtectedRoute path="/orders/me" component={ListOrders} exact />
         </div>
+        <ProtectedRoute
+          path="/dashboard"
+          isAdmin={true}
+          component={Dashboard}
+          exact
+        />
+        <ProtectedRoute
+          path="/admin/products"
+          isAdmin={true}
+          component={ProductsList}
+          exact
+        />
+        <ProtectedRoute
+          path="/admin/product"
+          isAdmin={true}
+          component={NewProduct}
+          exact
+        />
+
         <Footer />
       </div>
     </Router>

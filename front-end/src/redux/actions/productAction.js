@@ -3,6 +3,13 @@ import {
   ALL_PRODUCTS_REQUEST,
   ALL_PRODUCTS_SUCCESS,
   ALL_PRODUCTS_FAIL,
+  NEW_PRODUCT_REQUEST,
+  NEW_PRODUCT_FAIL,
+  NEW_PRODUCT_SUCCESS,
+  NEW_PRODUCT_RESET,
+  ADMIN_PRODUCTS_REQUEST,
+  ADMIN_PRODUCTS_FAIL,
+  ADMIN_PRODUCTS_SUCCESS,
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS_SUCCESS,
   PRODUCT_DETAILS_FAIL,
@@ -57,6 +64,59 @@ export const getProductDetails = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: PRODUCT_DETAILS_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const getAdminProducts = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: ADMIN_PRODUCTS_REQUEST,
+    });
+    const { data } = await axios.get(
+      `http://localhost:5000/api/v1/admin/products`
+    );
+
+    dispatch({
+      type: ADMIN_PRODUCTS_SUCCESS,
+      payload: data.products,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADMIN_PRODUCTS_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const newProduct = (productData) => async (dispatch) => {
+  try {
+    dispatch({
+      type: NEW_PRODUCT_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.post(
+      "http://localhost:5000/api/v1/admin/product/new",
+      productData,
+      config
+    );
+
+    dispatch({
+      type: NEW_PRODUCT_SUCCESS,
+      payload: data,
+    });
+    alert("product created");
+  } catch (error) {
+    console.log(error.response.data);
+    dispatch({
+      type: NEW_PRODUCT_FAIL,
       payload: error.response.data.message,
     });
   }

@@ -5,11 +5,29 @@ import MetaData from "../layout/MetaData";
 import SkeletonLoading from "../SkeletonLoading";
 import Sidebar from "./Sidebar";
 
+import { useDispatch, useSelector } from "react-redux";
+import { getAdminProducts } from "../../redux/actions/productAction";
+
 const Dashboard = () => {
+  const dispatch = useDispatch();
+
+  const { products } = useSelector((state) => state.products);
+
+  let outOfStock = 0;
+  products.forEach((product) => {
+    if (product === 0) {
+      outOfStock += 1;
+    }
+  });
+
+  useEffect(() => {
+    dispatch(getAdminProducts());
+  }, [dispatch]);
+
   return (
     <Fragment>
-      <div classNameName="row">
-        <div classNameName="col-12 col-md-2">
+      <div className="row">
+        <div className="col-12 col-md-2">
           <Sidebar />
         </div>
         <div className="col-12 col-md-10">
@@ -33,7 +51,7 @@ const Dashboard = () => {
                 <div className="card-body">
                   <div className="text-center card-font-size">
                     Products
-                    <br /> <b>56</b>
+                    <br /> <b>{products && products.length}</b>
                   </div>
                 </div>
                 <Link
@@ -93,7 +111,7 @@ const Dashboard = () => {
                 <div className="card-body">
                   <div className="text-center card-font-size">
                     Out of Stock
-                    <br /> <b>4</b>
+                    <br /> <b>{outOfStock}</b>
                   </div>
                 </div>
               </div>

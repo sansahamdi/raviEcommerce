@@ -4,6 +4,7 @@ import { MDBDataTable } from "mdbreact";
 
 import MetaData from "../layout/MetaData";
 import SkeletonLoading from "../SkeletonLoading";
+import Sidebar from "./Sidebar";
 
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
@@ -83,8 +84,29 @@ const ProdutsList = ({ history }) => {
 
   return (
     <Fragment>
+      <MetaData title={"All Products"} />
       <div className="row">
-        <div className="col-12 col-md-2"></div>
+        <div className="col-12 col-md-2">
+          <Sidebar />
+        </div>
+        <div className="col-12 col-md-10">
+          <Fragment>
+            <h1 className="my-5">All Products</h1>
+            {loading ? (
+              <SkeletonLoading />
+            ) : (
+              <Fragment>
+                <MDBDataTable
+                  data={setProducts()}
+                  className="px-3"
+                  bordered
+                  striped
+                  hover
+                />
+              </Fragment>
+            )}
+          </Fragment>
+        </div>
       </div>
     </Fragment>
   );
